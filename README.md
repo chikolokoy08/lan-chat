@@ -30,3 +30,18 @@ CREATE TABLE uploads (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 ~~~~
+
+# Running lan-chat-backend via node.js
+1. Open Terminal
+2. Do `cd lan-chat-backend`.
+3. Run `npm install`
+4. Create `.env` file. See example .env file details below
+```
+PORT=5000
+JWT_SECRET=lan_chat_app_private_key
+DBHOST=127.0.01
+DBNAME=lan_chat_app
+DBUNAME=root
+DBPASS=yourpassword
+```
+5. Run `node server.js`
