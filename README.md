@@ -29,4 +29,4 @@ CREATE TABLE uploads (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
-~~~~sql
+~~~~
