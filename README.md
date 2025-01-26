@@ -35,7 +35,7 @@ CREATE TABLE uploads (
 1. Open Terminal
 2. Do `cd lan-chat-backend`.
 3. Run `npm install`
-4. Create `.env` file. See example .env file details below
+4. Create `.env` file (inside the lan-chat-backend directory). See example .env file details below
 ```
 PORT=5000
 JWT_SECRET=lan_chat_app_private_key
