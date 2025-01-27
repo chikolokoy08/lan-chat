@@ -11,7 +11,9 @@ A quick project to create a LAN based chat app
 # Reminder
 Have fun!
 
-# MYSQL for table creation
+# Table creation
+1. Create a database named "lan_chat_app" with UTF-8 Unicode (utf8mb4) as Database Encoding and utf8mb4_unicode_ci as Database Collation.
+2. Connect to your MySQL and run SQL codes below.
 ~~~~sql
 USE lan_chat_app;
 
