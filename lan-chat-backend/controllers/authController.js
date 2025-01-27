@@ -4,7 +4,6 @@ const db = require('../models/db');
 
 // User Signup
 exports.signup = async (req, res) => {
-    console.log(req);
     const { email, password, first_name, last_name } = req.body;
     try {
         const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
