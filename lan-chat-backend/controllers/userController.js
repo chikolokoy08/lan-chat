@@ -13,6 +13,7 @@ exports.getProfile = async (req, res) => {
 };
 
 exports.getAllUsers = async (req, res) => {
+    const userId = req.user.id;
     const page = parseInt(req.query.page) || 1; // Default page is 1
     const limit = parseInt(req.query.limit) || 10; // Default limit is 10
     const offset = (page - 1) * limit;
@@ -20,8 +21,8 @@ exports.getAllUsers = async (req, res) => {
     try {
         // Query to fetch users with pagination
         const [rows] = await db.query(
-            'SELECT id, email, first_name, last_name, avatar, status, timestamp FROM users LIMIT ? OFFSET ?',
-            [limit, offset]
+            'SELECT id, email, first_name, last_name, avatar, status, timestamp FROM users WHERE id != ? LIMIT ? OFFSET ?',
+            [userId, limit, offset]
         );
 
         // Get total number of users
@@ -29,7 +30,7 @@ exports.getAllUsers = async (req, res) => {
         const totalUsers = countRows[0].count;
 
         res.status(200).json({
-            data: rows,
+            users: rows,
             pagination: {
                 totalUsers,
                 currentPage: page,
