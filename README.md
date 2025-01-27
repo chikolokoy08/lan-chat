@@ -1,6 +1,16 @@
 # lan-chat
 A quick project to create a LAN based chat app
 
+# Environment Caveats
+1. Used MAC
+2. User node v22.12.0
+3. Used Brew installed MySQL. You can use LAMP/MAMP stack as long as you know your MySQL's host, username and password
+4. Certain UI Limitations
+5. Used loop call instead of websocket to avoid complication on the deployment of the entire app
+
+# Reminder
+Have fun!
+
 # MYSQL for table creation
 ~~~~sql
 USE lan_chat_app;
