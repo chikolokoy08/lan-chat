@@ -61,7 +61,7 @@ Server is accessible on your network at http://192.168.254.156:5000
 3. Run `npm install`
 4. Create `.env` file (inside the lan-chat-backend directory). See example .env file details below
 ```
-BACKEND_URL=http://192.168.254.156:5000
+REACT_APP_BACKEND_URL=http://192.168.254.156:5000
 ```
 5. Run `npm start`
 Reminder: Fire up first your backend before serving the frontend
