@@ -23,7 +23,7 @@ const App = () => (
                     }
                 />
                 <Route
-                    path="/channel/:channelId"
+                    path="/channel/:channelKey"
                     element={
                         <PrivateRoute>
                             <Channel />

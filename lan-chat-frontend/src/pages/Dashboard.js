@@ -18,12 +18,27 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import ChatBox from '../components/ChatBox';
+
+const drawerWidth = 240;
 
 const Dashboard = () => {
     const { logout } = useContext(AuthContext);
     const [users, setUsers] = useState([]); // Initialize as an empty array
     const [drawerOpen, setDrawerOpen] = useState(true);
+    const [selectedUser, setSelectedUser] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
+    const navigate = useNavigate();
+    const currentUserId = JSON.parse(localStorage.getItem('user')).user.id; // Get current user ID
+
+    const handleUserClick = (user) => {
+        if (selectedUser?.id === user.id) return;
+        setSelectedUser(null);
+        setTimeout(()=>{
+            setSelectedUser(user);
+        },0);
+    };
 
     // Fetch users from /api/user/all
     useEffect(() => {
@@ -63,7 +78,15 @@ const Dashboard = () => {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+            <AppBar
+                position="fixed"
+                sx={{
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                    marginLeft: drawerOpen ? `${drawerWidth}px` : 0,
+                    width: drawerOpen ? `calc(100% - ${drawerWidth}px)` : '100%',
+                    transition: 'margin 0.3s, width 0.3s',
+                }}
+            >
                 <Toolbar>
                     <IconButton color="inherit" edge="start" onClick={toggleDrawer} sx={{ marginRight: 2 }}>
                         <MenuIcon />
@@ -93,20 +116,32 @@ const Dashboard = () => {
                 variant="persistent"
                 open={drawerOpen}
                 sx={{
-                    width: 240,
+                    width: drawerOpen ? drawerWidth : 0,
                     flexShrink: 0,
                     '& .MuiDrawer-paper': {
-                        width: 240,
-                        boxSizing: 'border-box',
+                        width: drawerOpen ? drawerWidth : 0,
+                        transition: 'width 0.3s',
                     },
                 }}
             >
                 <Toolbar />
                 <Box sx={{ overflow: 'auto' }}>
-                    <List>
+                    <List id="userList">
                         {Array.isArray(users) &&
                             users.map((user) => (
-                                <ListItem key={user.id} button>
+                                <ListItem
+                                    key={user.id}
+                                    button="true"
+                                    onClick={() => handleUserClick(user)}
+                                    disabled={selectedUser?.id === user.id} // Disable if already selected
+                                    sx={{
+                                        bgcolor: selectedUser?.id === user.id ? 'primary.light' : 'transparent', // Highlight active user
+                                        color: selectedUser?.id === user.id ? 'white' : 'inherit', // Change text color for active user
+                                        '&:hover': {
+                                            bgcolor: selectedUser?.id === user.id ? 'primary.light' : 'grey.200', // Hover color
+                                        },
+                                    }}
+                                >
                                     <ListItemAvatar>
                                         <Avatar>{user.first_name?.[0] || 'U'}</Avatar>
                                     </ListItemAvatar>
@@ -122,12 +157,13 @@ const Dashboard = () => {
 
             <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}>
                 <Toolbar />
-                <Typography variant="h4" gutterBottom>
-                    Welcome to the Dashboard
-                </Typography>
-                <Typography variant="body1">
-                    Select a user from the sidebar to start chatting.
-                </Typography>
+                {selectedUser ? (
+                    <ChatBox selectedUser={selectedUser} /> // Pass selected user to ChatBox
+                ) : (
+                    <Typography variant="h4">
+                        Select a user from the sidebar to start chatting.
+                    </Typography>
+                )}
             </Box>
         </Box>
     );

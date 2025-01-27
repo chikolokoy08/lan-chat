@@ -57,23 +57,20 @@ exports.createOrGetChannel = async (req, res) => {
 // Save a message to the channel
 exports.saveMessage = async (req, res) => {
     
-    const { channel_key, user_ids, message } = req.body;
+    const { channel_key, message } = req.body;
 
     // Validate input
-    if (!channel_key || !Array.isArray(user_ids)) {
+    if (!channel_key) {
         return res.status(400).json({ message: 'Invalid input. Provide channel_key, user_ids, and message.' });
     }
 
     try {
         // Decrypt the channel_key to verify the user_ids
         const decryptedUserIds = decryptChannelKey(channel_key);
-        const sortedUserIds = user_ids.sort((a, b) => a - b);
+        const sortedUserIds = decryptedUserIds;
         const sender_id = req.user.id;
 
-        if (
-            decryptedUserIds.length !== sortedUserIds.length ||
-            !sortedUserIds.includes(sender_id)
-        ) {
+        if (!sortedUserIds.includes(sender_id)) {
             return res.status(400).json({ message: 'Invalid channel_key or user_ids mismatch.' });
         }
 
@@ -140,23 +137,19 @@ exports.saveMessage = async (req, res) => {
 
 exports.getMessage = async (req, res) => {
     
-    const { channel_key, user_ids } = req.body;
+    const { channel_key } = req.body;
 
     // Validate input
-    if (!channel_key || !Array.isArray(user_ids)) {
+    if (!channel_key) {
         return res.status(400).json({ message: 'Invalid input. Provide channel_key, user_ids, and message.' });
     }
 
     try {
         // Decrypt the channel_key to verify the user_ids
         const decryptedUserIds = decryptChannelKey(channel_key);
-        const sortedUserIds = user_ids.sort((a, b) => a - b);
+        const sortedUserIds = decryptedUserIds;
         const checker_id = req.user.id;
-        if (
-            decryptedUserIds.length !== sortedUserIds.length ||
-            !decryptedUserIds.includes(checker_id) ||
-            !sortedUserIds.includes(checker_id)
-        ) {
+        if (!sortedUserIds.includes(checker_id)) {
             return res.status(400).json({ message: 'Invalid channel_key or user_ids mismatch.' });
         }
 

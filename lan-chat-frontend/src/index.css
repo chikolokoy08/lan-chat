@@ -1,0 +1,32 @@
+#chatBox {
+	/*position: absolute;
+  height: 100vh;
+  overflow-y: scroll;
+  margin-left: -32px;	*/
+  #sendBox {
+		position: fixed;
+    bottom: 0;
+    padding: 10px;
+    background-color: #fff;
+    right: 0;
+    z-index: 99999;
+    width: auto;
+    left: 0;
+    border-top: 1px solid #ddd;
+  }
+}
+#cbTitle {
+	text-align:right;
+}
+#chatThread {
+	padding-bottom: 125px;
+	.MuiPaper-root {
+		--Paper-shadow: none!important;
+	}
+}
+
+#userList {
+	li {
+		cursor: pointer;
+	}
+}

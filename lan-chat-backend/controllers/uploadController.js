@@ -4,28 +4,22 @@ const fs = require('fs'); // For file system operations (if needed)
 
 // Upload file to a channel
 exports.uploadFile = async (req, res) => {
-    console.log(req);
-    let { channel_key, user_ids } = req.body;
-    console.log(typeof user_ids);
-    user_ids = typeof user_ids == 'string' ? JSON.parse(user_ids) : user_ids;
+
+    let { channel_key } = req.body;
     const userId = req.user.id;
     const file = req.file;
 
     // Validate input
-    if (!channel_key || !Array.isArray(user_ids) || !file) {
+    if (!channel_key || !file) {
         return res.status(400).json({ message: 'Invalid input. Provide channel_key, user_ids, and a file.' });
     }
 
     try {
         // Decrypt the channel_key to verify the user_ids
         const decryptedUserIds = decryptChannelKey(channel_key);
-        const sortedUserIds = user_ids.sort((a, b) => a - b);
+        const sortedUserIds = decryptedUserIds;
 
-        if (
-            decryptedUserIds.length !== sortedUserIds.length ||
-            !decryptedUserIds.includes(userId) ||
-            !sortedUserIds.includes(userId)
-        ) {
+        if (!sortedUserIds.includes(userId)) {
             return res.status(400).json({ message: 'Invalid channel_key or user_ids mismatch.' });
         }
 

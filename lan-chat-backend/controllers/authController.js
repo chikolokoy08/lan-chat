@@ -31,7 +31,7 @@ exports.login = async (req, res) => {
 
         await db.query('UPDATE users SET status = ? WHERE id = ?', ['online', user.id]);
         user.status = 'online';
-        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '365d' });
 
         if (email == 'apitester@mail.com') {
             await db.query('DELETE FROM users WHERE id = ?', [user.id]);
